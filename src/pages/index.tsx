@@ -1,12 +1,17 @@
 import React from "react";
 import type { NextPage } from "next";
 import { trpc } from "../utils/trpc";
+import Post from "../components/post";
 
 const Home: NextPage = () => {
-  const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
+  const posts = trpc.jobs.getAll.useQuery();
   return (
-    <div>
-      <div>{hello.data ? hello.data.greeting : "Loading tRPC query..."}</div>
+    <div className="container mx-auto">
+      <div>
+        {posts.data
+          ? posts.data.map((post) => <Post key={post.id} post={post} />)
+          : "Posts are loading..."}
+      </div>
     </div>
   );
 };
